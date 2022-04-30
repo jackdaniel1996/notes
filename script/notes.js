@@ -1,5 +1,5 @@
-//creating DOM elements
-// src https://javascript.plainenglish.io/how-to-build-complex-dom-elements-quickly-b3ead8e09647
+// src for this function https://javascript.plainenglish.io/how-to-build-complex-dom-elements-quickly-b3ead8e09647
+// creating DOM elements
 // Attributes (attrs) must be written in camelCase
 let dom_utils = {};
 (function(context) {
@@ -27,17 +27,15 @@ let dom_utils = {};
        
         return el;
     };
-
 })(dom_utils);
 
 // add-Column button
 function addColButton(){
     let notesBody = document.getElementById('notesBody');
-    let columnCount = 'column-' + (($('.notes-column').length) + 1);
 
     let addCol =  dom_utils.createEl({
         type: 'div',
-        id: columnCount,
+        id: 'column-0',
         className: 'notes-column add-column',
         innerHTML:'',
         attrs:{
@@ -63,7 +61,7 @@ $(document).ready(function(){
 // add Column
 function addCol(){
     let notesBody = document.getElementById('notesBody');
-    let columnCount = 'column-' + (($('.notes-column').length) + 1);
+    let columnCount = 'column-' + $('.notes-column').length;
 
     //col body
     let addColBody =  dom_utils.createEl({
@@ -95,6 +93,11 @@ function addCol(){
     notesBody.insertBefore(addColBody, notesBody.lastElementChild);
     addColBody.appendChild(addColHeadline);
     addColBody.appendChild(addColEntryBtn);
+    
+    //add first entry
+    addColEntry(addColEntryBtn)
+
+    saveData()
 }
 
 //add Entry
@@ -113,7 +116,7 @@ function addColEntry(elem){
     //entry content
     let addNotesEntryHeadline =  dom_utils.createEl({
         type: 'div',
-        id: entryCount,
+        id: '',
         className: 'notes-entry-head',
         innerHTML:'Entry Headline',
         attrs:{
@@ -123,7 +126,7 @@ function addColEntry(elem){
 
     let addNotesEntryText =  dom_utils.createEl({
         type: 'div',
-        id: entryCount,
+        id: '',
         className: 'notes-entry-text',
         innerHTML:'Entry text',
         attrs:{
@@ -133,5 +136,41 @@ function addColEntry(elem){
     colBodyParent.insertBefore(addNotesEntry, colBodyParent.lastElementChild);
     addNotesEntry.appendChild(addNotesEntryHeadline);
     addNotesEntry.appendChild(addNotesEntryText);
-    
 }
+
+// saving data
+var dbContent = {}; // object to store notes content
+
+function saveData(){
+    dbContent.columnCount = $('.notes-column').length - 1;
+
+    // get col and headline
+    var i = 0; //column count    
+    do {
+        i += 1;
+        let col = 'column-' + i;
+        let entryCount = document.getElementById(col).querySelectorAll('.notes-entry').length;        
+
+        dbContent[col] = {};        
+        dbContent[col]["headline"] = $('#' + col + ' .notes-column-head').text(); //column headline 
+
+        //get entrys of col and its content
+        var e = 0 //entry count
+        do {
+            e += 1;
+            let entry = 'entry-' + e;
+            dbContent[col][entry] = {};
+            dbContent[col][entry]["headline"] =  $('#' + col + ' #' + entry + ' .notes-entry-head').text(); // entry headline
+            dbContent[col][entry]["text"] =  $('#' + col + ' #' + entry + ' .notes-entry-text').text(); // entry content
+
+        }while (e < entryCount)
+
+    } while (i < dbContent.columnCount);
+
+    console.log(dbContent);
+}
+
+
+// $(document).ready(function(){
+//     saveData()
+// });

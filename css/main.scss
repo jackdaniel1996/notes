@@ -66,10 +66,12 @@ body {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;    
-    border: 2px solid $borderColor;
+    outline: 2px solid $borderColor;
     border-radius: 3px;
     padding: 0 10px;
     box-shadow: 10px 10px 0px #fc427b;
+    max-height: 100%;
+    overflow-x: hidden;
 
     div[contenteditable]{
         &:focus-visible{
@@ -85,7 +87,6 @@ body {
         width: calc(100% + 22px);
         position: relative;
         left: -11px;
-        bottom: -1px;
         padding: 5px;
         text-align: center;
         color: $fontColorGrey;
@@ -106,16 +107,16 @@ body {
     font-size: 18pt;
     font-weight: 700;
     font-family: $fontText;    
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
+    // overflow: hidden;
     padding: 5px 15px;
     width: calc(100% + 22px);
     position: relative;
     left: -11px;
-    top: -1px;
     color: rgb(116, 116, 116);
     background-color: white;
+    margin-bottom: 5px;
 }
 
 .notes-entry{
