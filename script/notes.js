@@ -196,7 +196,7 @@ $(document).ready(function(){
         //column
         do{
             c += 1;
-            let colId = Object.getOwnPropertyNames(savedData);
+            let colId = Object.getOwnPropertyNames(savedData); //TODO: error when saveData does not exist yet (empty)
 
             //col body
             let addColBody =  dom_utils.createEl({
