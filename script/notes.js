@@ -1,3 +1,13 @@
+//save 2s after Input
+let input = $('.notes-column-head, .notes-entry-head, .notes-entry-text');
+let timer;
+var saving = () => input.on('input', function (e) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+        saveData()
+    }, 1000);
+});
+
 // src for this function https://javascript.plainenglish.io/how-to-build-complex-dom-elements-quickly-b3ead8e09647
 // creating DOM elements
 // Attributes (attrs) must be written in camelCase
@@ -78,7 +88,7 @@ function addCol(){
         className: 'notes-column-head',
         innerHTML: 'Headline',
         attrs:{
-            contenteditable:''
+            contenteditable:'',
         }
     });
     let addColEntryBtn = dom_utils.createEl({
@@ -95,9 +105,10 @@ function addCol(){
     addColBody.appendChild(addColEntryBtn);
     
     //add first entry
-    addColEntry(addColEntryBtn)
+    addColEntry(addColEntryBtn);
 
-    saveData()
+    //save
+    saveData();
 }
 
 //add Entry
@@ -136,6 +147,9 @@ function addColEntry(elem){
     colBodyParent.insertBefore(addNotesEntry, colBodyParent.lastElementChild);
     addNotesEntry.appendChild(addNotesEntryHeadline);
     addNotesEntry.appendChild(addNotesEntryText);
+
+    input = $('.notes-column-head, .notes-entry-head, .notes-entry-text');
+    saving();
 }
 
 // saving data
@@ -167,10 +181,102 @@ function saveData(){
 
     } while (i < dbContent.columnCount);
 
-    console.log(dbContent);
+    console.log('Saved!');
+
+    localStorage.setItem('savedData', JSON.stringify(dbContent));
 }
 
+//displaying saved data
+$(document).ready(function(){
+    (function displayData (){
+        let savedData = JSON.parse(localStorage.getItem('savedData'));
+        let notesBody = document.getElementById('notesBody');
 
-// $(document).ready(function(){
-//     saveData()
-// });
+        var c = 0;
+        //column
+        do{
+            c += 1;
+            let colId = Object.getOwnPropertyNames(savedData);
+
+            //col body
+            let addColBody =  dom_utils.createEl({
+                type: 'div',
+                id: colId[c],
+                className: 'notes-column',
+                innerHTML:'',
+                attrs:''        
+            });         
+
+            //col headline
+            let addColHeadline = dom_utils.createEl({
+                type: 'div',
+                className: 'notes-column-head',
+                innerHTML: savedData[colId[c]].headline,
+                attrs:{
+                    contenteditable:'',
+                }
+            });
+
+            //add entry button
+            let addColEntryBtn = dom_utils.createEl({
+                type: 'div',
+                className: 'notes-add-entry',
+                innerHTML: 'Add Entry +',
+                attrs:{
+                    onclick: 'addColEntry(this)'
+                }
+            });
+
+            notesBody.insertBefore(addColBody, notesBody.lastElementChild);
+
+            let col = document.getElementById('column-'+c);
+            col.appendChild(addColHeadline);
+            col.appendChild(addColEntryBtn);
+
+            //entrys
+            let entryCount = Object.getOwnPropertyNames(savedData[colId[c]])
+            var e = 0;
+            do{
+                e += 1;
+                let entryId = Object.getOwnPropertyNames(savedData[colId[c]]);
+                //entry body
+                let addNotesEntry =  dom_utils.createEl({
+                    type: 'div',
+                    id: entryId[e],
+                    className: 'notes-entry',
+                    innerHTML:'',
+                    attrs:''
+                });
+                
+                col.insertBefore(addNotesEntry, col.lastElementChild);
+
+                //entry content
+                let addNotesEntryHeadline =  dom_utils.createEl({
+                    type: 'div',
+                    id: '',
+                    className: 'notes-entry-head',
+                    innerHTML: savedData['column-'+c]['entry-'+e].headline,
+                    attrs:{
+                        contenteditable:''
+                    }
+                });
+
+                let addNotesEntryText =  dom_utils.createEl({
+                    type: 'div',
+                    id: '',
+                    className: 'notes-entry-text',
+                    innerHTML:savedData['column-'+c]['entry-'+e].text,
+                    attrs:{
+                        contenteditable:''
+                    }
+                });
+
+                let entry = $('#column-'+c+' #entry-'+e);
+                entry.append(addNotesEntryHeadline);
+                entry.append(addNotesEntryText);
+
+            }while (e < entryCount.length - 1)
+
+        }while (c < savedData.columnCount)
+    })();
+});
