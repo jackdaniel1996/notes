@@ -118,17 +118,4 @@ body {
   padding: 5px;
   cursor: pointer;
   text-align: center;
-}
-
-section[data-foo=bar] {
-  font-family: Arial;
-}
-
-section[data-baz=garply] {
-  font-weight: bold;
-  color: purple;
-}
-
-.test {
-  font-size: 20px;
 }/*# sourceMappingURL=main.css.map */
