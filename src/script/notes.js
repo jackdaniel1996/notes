@@ -1,4 +1,10 @@
-
+let lables = {
+    addColumn: 'Add Column +',
+    addEntry: 'Add Entry +',
+    headline: 'Headline',
+    entryHeadline: 'Entry Headline',
+    entryText: 'Entry Text'
+}
 
 let dom_utils = {};
 // elements that are editable
@@ -67,7 +73,7 @@ function addColButton(){
     let addCol = appendDOMobj('div', 'column-0', 'notes-column add-column', '', addColAttr, notesBody);    
 
     // add column button content
-    appendDOMobj('div', '', 'notes-add-column', 'Add Column +', '', addCol);  
+    appendDOMobj('div', '', 'notes-add-column', lables.addColumn, '', addCol);  
 }
 
 // add Column
@@ -85,10 +91,10 @@ function addCol(){
 
     //col content
     let colHeadlineAttr = {contenteditable:''};
-    appendDOMobj('div', '', 'notes-column-head', 'Headline', colHeadlineAttr, addColBody);
+    appendDOMobj('div', '', 'notes-column-head', lables.healdine, colHeadlineAttr, addColBody);
 
     let addEntryAttr = {onclick: 'addColEntry(this)'};
-    let addColEntryBtn = appendDOMobj('div', '', 'notes-add-entry', 'Add Entry +', addEntryAttr, addColBody);
+    let addColEntryBtn = appendDOMobj('div', '', 'notes-add-entry', lables.addEntry, addEntryAttr, addColBody);
         
     //add first entry
     addColEntry(addColEntryBtn);
@@ -109,9 +115,9 @@ function addColEntry(elem){
     //entry content
     let notesAttr = {contenteditable:''}
     //headline
-    appendDOMobj('div', '', 'notes-entry-head', 'Entry Headline', notesAttr, addNotesEntry)
+    appendDOMobj('div', '', 'notes-entry-head', lables.healdine, notesAttr, addNotesEntry)
     //text
-    appendDOMobj('div', '', 'notes-entry-text', 'Entry text', notesAttr, addNotesEntry)
+    appendDOMobj('div', '', 'notes-entry-text', lables.healdine, notesAttr, addNotesEntry)
    
     //save
     contentInputs = $('.notes-column-head, .notes-entry-head, .notes-entry-text');
@@ -214,7 +220,7 @@ $(document).ready(function(){
 
                 //add entry button
                 let addEntryAttr = {onclick: 'addColEntry(this)'};
-                appendDOMobj('div', '', 'notes-add-entry', 'Add Entry +', addEntryAttr, col);
+                appendDOMobj('div', '', 'notes-add-entry', lables.addEntry, addEntryAttr, col);
                 
                 //entrys
                 let entryCount = Object.getOwnPropertyNames(savedData[colId[c]])
