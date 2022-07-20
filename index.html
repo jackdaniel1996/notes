@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notes</title>
-  <!-- CSS -->
-  <link href="src/css/main.css" rel="stylesheet">
-  <!-- jQuery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <!-- CSS -->
+    <link href="src/css/main.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-  <!-- SCRIPT -->
-  <script src="src/script/notes.js"></script>
+    <!-- SCRIPT -->
+    <script src="src/script/notes.js"></script>
 
-  <!--FONTS-->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Raleway:wght@100;400;600;700&display=swap" rel="stylesheet">
+    <!--FONTS-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Raleway:wght@100;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- FAVICON -->
-  <link rel="apple-touch-icon" sizes="180x180" href="src/imgs/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="src/imgs/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="src/imgs/favicon/favicon-16x16.png">
-  <link rel="mask-icon" href="src/imgs/favicon/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#ffffff">
+    <!-- FAVICON -->
+    <link rel="apple-touch-icon" sizes="180x180" href="src/imgs/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="src/imgs/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="src/imgs/favicon/favicon-16x16.png">
+    <link rel="mask-icon" href="src/imgs/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 
-</head>
+  </head>
 
-<body>
-  <div class="navigation">
-    <div class="nav-logo">Notes.</div>
-  </div>
-  <div id="notesBody" class="notes-body">
-    <!-- content comes here  -->
-  </div>
-</body>
-
+  <body>
+    <div class="navigation">
+      <div class="nav-logo">Notes.</div>     
+      <svg id="settings" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-adjustments-horizontal" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <circle cx="14" cy="6" r="2" />
+        <line x1="4" y1="6" x2="12" y2="6" />
+        <line x1="16" y1="6" x2="20" y2="6" />
+        <circle cx="8" cy="12" r="2" />
+        <line x1="4" y1="12" x2="6" y2="12" />
+        <line x1="10" y1="12" x2="20" y2="12" />
+        <circle cx="17" cy="18" r="2" />
+        <line x1="4" y1="18" x2="15" y2="18" />
+        <line x1="19" y1="18" x2="20" y2="18" />
+      </svg>
+    </div>
+    <div id="overlay" class="settings-overlay">
+      <div id="close" class="button-close"></div>
+      <div class="settings-content-wrapper">
+        <div class="settings-headline">Farbschema</div>
+        <div class="settings-section">
+          <span class="settings-text">Hintergrund:</span>
+          <input type="color" id="colorTheme" value="#1B9CFC">
+        </div>
+      </div>
+    </div>
+    <div id="notesBody" class="notes-body">
+      <!-- content comes here  -->
+    </div>
+  </body>
 </html>

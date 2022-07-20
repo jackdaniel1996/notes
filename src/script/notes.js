@@ -91,7 +91,7 @@ function addCol(){
 
     //col content
     let colHeadlineAttr = {contenteditable:''};
-    appendDOMobj('div', '', 'notes-column-head', lables.healdine, colHeadlineAttr, addColBody);
+    appendDOMobj('div', '', 'notes-column-head', lables.headline, colHeadlineAttr, addColBody);
 
     let addEntryAttr = {onclick: 'addColEntry(this)'};
     let addColEntryBtn = appendDOMobj('div', '', 'notes-add-entry', lables.addEntry, addEntryAttr, addColBody);
@@ -115,9 +115,9 @@ function addColEntry(elem){
     //entry content
     let notesAttr = {contenteditable:''}
     //headline
-    appendDOMobj('div', '', 'notes-entry-head', lables.healdine, notesAttr, addNotesEntry)
+    appendDOMobj('div', '', 'notes-entry-head', lables.entryHeadline, notesAttr, addNotesEntry)
     //text
-    appendDOMobj('div', '', 'notes-entry-text', lables.healdine, notesAttr, addNotesEntry)
+    appendDOMobj('div', '', 'notes-entry-text', lables.entryHeadline, notesAttr, addNotesEntry)
    
     //save
     contentInputs = $('.notes-column-head, .notes-entry-head, .notes-entry-text');
@@ -246,7 +246,7 @@ $(document).ready(function(){
     })();
 
     contentInputs = $('.notes-column-head, .notes-entry-head, .notes-entry-text');
-    contentInputs.each(inputSave);
+    contentInputs.each(inputSave);    
 });
 
 //save after input
@@ -259,10 +259,40 @@ contentInputs.each(inputSave);
 function inputSave(input){
     contentInputs[input].addEventListener('keyup', () => {
         clearTimeout(typingTimer); 
-        typingTimer = setTimeout(doneTyping, doneTypingInterval);          
+        typingTimer = setTimeout(saveData(), doneTypingInterval);          
     });
 }
 
-function doneTyping() {
-    saveData()
-}
+//Settings/Overlay
+$(document).ready(function(){
+    let overlay = $("#overlay");
+    let savedBgColor = localStorage.getItem('colorBg');
+    let colorTheme = document.getElementById("colorTheme");
+    let colorBg = '#1B9CFC';
+
+    if(savedBgColor != null){
+        colorBg = savedBgColor;
+        $('.notes-body').css('background-color', colorBg);
+        $('.nav-logo, #settings').css('color', colorBg);
+        $(colorTheme).attr('value', colorBg);
+    }
+
+
+    document.getElementById('settings').addEventListener('click', () => {
+        overlay.toggleClass('open');
+    });
+
+    document.getElementById('close').addEventListener('click', () => {
+        overlay.toggleClass('open');
+    });   
+
+    colorTheme.addEventListener('change', () => {
+        colorBg = event.target.value;
+        $(colorTheme).attr('value', colorBg);
+        $('.notes-body').css('background-color', colorBg);
+        $('.nav-logo, #settings').css('color', colorBg);
+        localStorage.setItem('colorBg', colorBg);
+    });
+
+
+});
