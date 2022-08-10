@@ -1,9 +1,9 @@
 let lables = {
-    addColumn: 'Add Column +',
-    addEntry: 'Add Entry +',
-    headline: 'Headline',
-    entryHeadline: 'Entry Headline',
-    entryText: 'Entry Text'
+    addColumn: 'Block Hinzufügen +',
+    addEntry: 'Eintrag hinzufügen +',
+    headline: 'Überschrift',
+    entryHeadline: 'Eintrag: Überschrift',
+    entryText: 'Eintrag: Text'
 }
 
 let dom_utils = {};
@@ -102,6 +102,7 @@ function addCol(){
     //save
     contentInputs = $('.notes-column-head, .notes-entry-head, .notes-entry-text');
     contentInputs.each(inputSave);
+    setNotesColor();
 }
 
 //add Entry
@@ -111,13 +112,14 @@ function addColEntry(elem){
     let entryCount = 'entry-'+ parentCount + '-' + (($('#' + elem.parentNode.id + ' .notes-entry').length) + 1); //id of entry (entry-ColCount-EntryCount)
     //entry body
     let addNotesEntry = insertDOMobj('div', entryCount, 'notes-entry', '', '', colBodyParent);
-   
+    // delete btn
+    appendDOMobj('div', '', 'delete-entry', '', {onclick: 'deleteEntry(this)'}, addNotesEntry);
     //entry content
     let notesAttr = {contenteditable:''}
     //headline
-    appendDOMobj('div', '', 'notes-entry-head', lables.entryHeadline, notesAttr, addNotesEntry)
+    appendDOMobj('div', '', 'notes-entry-head', lables.entryHeadline, notesAttr, addNotesEntry);
     //text
-    appendDOMobj('div', '', 'notes-entry-text', lables.entryHeadline, notesAttr, addNotesEntry)
+    appendDOMobj('div', '', 'notes-entry-text', lables.entryText, notesAttr, addNotesEntry);
    
     //save
     contentInputs = $('.notes-column-head, .notes-entry-head, .notes-entry-text');
@@ -127,14 +129,17 @@ function addColEntry(elem){
 
 //delete Col
 function deleteCol(col){
-    selectedColumn = col.parentElement.getAttribute('id').slice(-1);
+    let selectedColumn = col.parentElement.getAttribute('id').slice(-1);
     $('#column-' + selectedColumn).remove();  
     renumberContent();
+}
 
-    //save
-    setTimeout(function(){
-        saveData();
-    }, 200); 
+//delete entry
+function deleteEntry(entry){
+    let selectedEntry = entry.parentElement;
+    let selectedCol = entry.parentElement.parentElement;
+    $(selectedEntry).remove();  
+    renumberEntrys(selectedCol);
 }
 
 function renumberContent(){
@@ -149,6 +154,16 @@ function renumberContent(){
         });
     });
     $('#notesBody > :last-child').attr('id', 'column-0');
+    saveData();
+}
+
+function renumberEntrys(selectedCol){
+    let entrys = selectedCol.querySelectorAll('.notes-entry');
+    $(entrys).each(function(e){
+        e += 1;
+        $(this).attr('id', 'entry-'+ selectedCol.id.slice(-1) + '-' + e);
+    });
+    saveData();
 }
 
 // saving data
@@ -229,8 +244,9 @@ $(document).ready(function(){
                     e += 1;
                     let entryId = Object.getOwnPropertyNames(savedData[colId[c]]);
                     //entry body
-                    insertDOMobj('div', entryId[e], 'notes-entry', '', '', col);
-                    
+                    let entryBody = insertDOMobj('div', entryId[e], 'notes-entry', '', '', col);
+                    // delete btn
+                    appendDOMobj('div', '', 'delete-entry', '', {onclick: 'deleteEntry(this)'}, entryBody);
                     //entry content
                     let entry = $('#column-'+c+' #entry-'+c+'-'+e);
                     //entry headline
@@ -262,37 +278,3 @@ function inputSave(input){
         typingTimer = setTimeout(saveData(), doneTypingInterval);          
     });
 }
-
-//Settings/Overlay
-$(document).ready(function(){
-    let overlay = $("#overlay");
-    let savedBgColor = localStorage.getItem('colorBg');
-    let colorTheme = document.getElementById("colorTheme");
-    let colorBg = '#1B9CFC';
-
-    if(savedBgColor != null){
-        colorBg = savedBgColor;
-        $('.notes-body').css('background-color', colorBg);
-        $('.nav-logo, #settings').css('color', colorBg);
-        $(colorTheme).attr('value', colorBg);
-    }
-
-
-    document.getElementById('settings').addEventListener('click', () => {
-        overlay.toggleClass('open');
-    });
-
-    document.getElementById('close').addEventListener('click', () => {
-        overlay.toggleClass('open');
-    });   
-
-    colorTheme.addEventListener('change', () => {
-        colorBg = event.target.value;
-        $(colorTheme).attr('value', colorBg);
-        $('.notes-body').css('background-color', colorBg);
-        $('.nav-logo, #settings').css('color', colorBg);
-        localStorage.setItem('colorBg', colorBg);
-    });
-
-
-});
